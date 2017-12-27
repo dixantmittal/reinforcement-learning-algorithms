@@ -16,11 +16,10 @@ def get_max_value():
         prev_value = np.array(value)
 
         # calculate value for states maxed over actions
-        value = np.max(data.gamma * np.dot(np.transpose(data.transition_table, axes=(1, 0, 2)),
-                                           value) + data.reward_table.transpose(), axis=1)
-
+        value = np.max(data.gamma * np.dot(data.transition_table, value) + data.reward_table, axis=1)
         # convergence check
-        if np.sum(value - prev_value) < 1:
+        if np.sum(value - prev_value) < 1e-3:
+            print('converged!')
             break
 
     return value
@@ -28,7 +27,7 @@ def get_max_value():
 
 def get_policy(value):
     # check which action gives best expected and assign it
-    policy = np.argmax(np.dot(np.transpose(data.transition_table, axes=(1, 0, 2)), value), axis=1)
+    policy = np.argmax(data.gamma * np.dot(data.transition_table, value) + data.reward_table, axis=1)
 
     return policy
 
@@ -37,10 +36,12 @@ def main():
     # get max value function
     value = get_max_value()
 
+    print('Optimal Value:', value)
+
     # improve the policy
     policy = get_policy(value)
 
-    print(policy)
+    print('Optimal Policy:', policy)
 
 
 if __name__ == '__main__':

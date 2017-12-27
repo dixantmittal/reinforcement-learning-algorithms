@@ -9,24 +9,25 @@ import numpy as np
 class Data(object):
 
     def __init__(self, n_states, n_actions):
-        table = np.random.rand(n_actions, n_states, n_states)
-        mask = np.random.rand(n_actions, n_states, n_states) < 0.75
+        table = np.random.rand(n_states, n_actions, n_states)
+        mask = np.random.rand(n_states, n_actions, n_states) < 0.5
         table[mask] = 0
         table = table / (np.sum(table, axis=2, keepdims=True) + 1e-20)
+
         self.transition_table = table
         self.gamma = 0.9
-        self.reward_table = np.random.randint(low=0, high=10, size=n_states * n_actions).reshape(n_actions, n_states)
+        self.reward_table = np.random.randint(low=0, high=10, size=n_states * n_actions).reshape(n_states, n_actions)
 
     def transition_model(self, state, action=None):
         if action is None:
-            return self.transition_table[:, state]
+            return self.transition_table[state]
         else:
-            return self.transition_table[action, state]
+            return self.transition_table[state, action]
 
     def reward(self, state=None, action=None):
 
         if action is None:
-            return self.reward_table[:, state]
+            return self.reward_table[state]
 
         else:
-            return self.reward_table[action, state]
+            return self.reward_table[state, action]
