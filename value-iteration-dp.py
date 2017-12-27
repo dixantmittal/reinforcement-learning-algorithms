@@ -4,7 +4,10 @@ from data.data import *
 
 # global constants
 n_states = 16
+n_actions = 4
 n_iterations = 100
+
+data = Data(n_states, n_actions)
 
 
 def get_max_value():
@@ -13,7 +16,8 @@ def get_max_value():
         prev_value = np.array(value)
 
         # calculate value for states maxed over actions
-        value = np.max(np.dot(np.transpose(transition_table, axes=(1, 0, 2)), value) + reward.reshape((-1, 1)), axis=1)
+        value = np.max(data.gamma * np.dot(np.transpose(data.transition_table, axes=(1, 0, 2)),
+                                           value) + data.reward_table.transpose(), axis=1)
 
         # convergence check
         if np.sum(value - prev_value) < 1:
@@ -24,7 +28,7 @@ def get_max_value():
 
 def get_policy(value):
     # check which action gives best expected and assign it
-    policy = np.argmax(np.dot(np.transpose(transition_table, axes=(1, 0, 2)), value), axis=1)
+    policy = np.argmax(np.dot(np.transpose(data.transition_table, axes=(1, 0, 2)), value), axis=1)
 
     return policy
 

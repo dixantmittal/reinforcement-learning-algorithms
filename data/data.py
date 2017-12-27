@@ -5,16 +5,28 @@
 
 import numpy as np
 
-states = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
-actions = {0, 1, 2, 3, 4, 5}
 
-reward = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0])
+class Data(object):
 
-transition_table = np.load(open('data/transition-table.npy', 'rb'))
+    def __init__(self, n_states, n_actions):
+        table = np.random.rand(n_actions, n_states, n_states)
+        mask = np.random.rand(n_actions, n_states, n_states) < 0.75
+        table[mask] = 0
+        table = table / (np.sum(table, axis=2, keepdims=True) + 1e-20)
+        self.transition_table = table
+        self.gamma = 0.9
+        self.reward_table = np.random.randint(low=0, high=10, size=n_states * n_actions).reshape(n_actions, n_states)
 
+    def transition_model(self, state, action=None):
+        if action is None:
+            return self.transition_table[:, state]
+        else:
+            return self.transition_table[action, state]
 
-def transition_model(state, action=None):
-    if action is None:
-        return transition_table[:, state]
-    else:
-        return transition_table[action, state]
+    def reward(self, state=None, action=None):
+
+        if action is None:
+            return self.reward_table[:, state]
+
+        else:
+            return self.reward_table[action, state]

@@ -4,7 +4,10 @@ from data.data import *
 
 # global constants
 n_states = 16
-n_iterations = 100
+n_actions = 4
+n_iterations = 300
+
+data = Data(n_states, n_actions)
 
 
 def policy_evaluation(policy, value):
@@ -12,7 +15,8 @@ def policy_evaluation(policy, value):
         prev_value = np.array(value)
 
         # calculate values for all actions
-        value = np.dot(np.transpose(transition_table, axes=(1, 0, 2)), value) + reward.reshape((-1, 1))
+        value = data.gamma * np.dot(np.transpose(data.transition_table, axes=(1, 0, 2)),
+                                    value) + data.reward_table.transpose()
 
         # calculate value for policy action
         value = value[range(n_states), policy]
@@ -26,7 +30,7 @@ def policy_evaluation(policy, value):
 
 def policy_improvement(value):
     # check which action gives best expected and assign it
-    policy = np.argmax(np.dot(np.transpose(transition_table, axes=(1, 0, 2)), value), axis=1)
+    policy = np.argmax(np.dot(np.transpose(data.transition_table, axes=(1, 0, 2)), value), axis=1)
 
     return policy
 
