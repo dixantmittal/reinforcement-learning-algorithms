@@ -1,7 +1,7 @@
-# Each state is treated as an index in the array. 's' Reward is written as 1D array assigning a reward value [R(s)]
-# to each state. Transition probability table is represented as a 3D matrix with axis: (action, current state,
+# Each state is treated as an index in the array 's' .Reward is written as 2D array assigning a reward value [R(s,a)]
+# to each state and corresponding action. Transition probability table is represented as a 3D matrix with axis: (action, current state,
 # next state) If there is a probability for a state s to transition to some other state s' under action a,
-# probability value is given by table[a,s,s']
+# probability value is given by table[s,a,s']
 
 import numpy as np
 

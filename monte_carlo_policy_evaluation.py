@@ -3,13 +3,6 @@ from tqdm import tqdm
 
 from data.data import Data
 
-n_states = 5
-n_actions = 2
-n_episodes = 10000
-max_episode_length = 100
-
-data = Data(n_states, n_actions)
-
 
 def simulator(state, action):
     next_state_distribution = data.transition_model(state, action)
@@ -60,4 +53,10 @@ def main():
 
 
 if __name__ == '__main__':
+    n_states = 5
+    n_actions = 2
+    n_episodes = 10000
+    max_episode_length = 100
+
+    data = Data(n_states, n_actions)
     main()

@@ -1,14 +1,5 @@
 from data.data import *
 
-# for syntax/representation, refer data/data.py
-
-# global constants
-n_states = 16
-n_actions = 4
-n_iterations = 100
-
-data = Data(n_states, n_actions)
-
 
 def get_max_value():
     value = np.zeros(n_states)
@@ -45,4 +36,10 @@ def main():
 
 
 if __name__ == '__main__':
+    n_states = 16
+    n_actions = 4
+    n_iterations = 100
+
+    data = Data(n_states, n_actions)
+
     main()

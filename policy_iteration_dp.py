@@ -1,14 +1,5 @@
 from data.data import *
 
-# for syntax/representation, refer data/data.py
-
-# global constants
-n_states = 5
-n_actions = 4
-n_iterations = 300
-
-data = Data(n_states, n_actions)
-
 
 def policy_evaluation(policy, value):
     for r in range(n_iterations):
@@ -64,4 +55,11 @@ def main():
 
 
 if __name__ == '__main__':
+    # global constants
+    n_states = 5
+    n_actions = 4
+    n_iterations = 300
+
+    data = Data(n_states, n_actions)
+
     main()
