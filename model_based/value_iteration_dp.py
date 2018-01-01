@@ -1,9 +1,9 @@
 from data.data import *
 
 
-def get_max_value():
-    value = np.zeros(n_states)
-    for r in range(n_iterations):
+def get_max_value(data):
+    value = np.zeros(data.n_states)
+    for r in range(data.max_iterations):
         prev_value = np.array(value)
 
         # calculate value for states maxed over actions
@@ -16,30 +16,24 @@ def get_max_value():
     return value
 
 
-def get_policy(value):
+def get_policy(data, value):
     # check which action gives best expected and assign it
     policy = np.argmax(data.gamma * np.dot(data.transition_table, value) + data.reward_table, axis=1)
 
     return policy
 
 
-def main():
+def main(data):
     # get max value function
-    value = get_max_value()
+    value = get_max_value(data)
 
     print('Optimal Value:', value)
 
     # improve the policy
-    policy = get_policy(value)
+    policy = get_policy(data, value)
 
     print('Optimal Policy:', policy)
 
 
 if __name__ == '__main__':
-    n_states = 16
-    n_actions = 4
-    n_iterations = 100
-
-    data = Data(n_states, n_actions)
-
-    main()
+    main(Data(n_states=5, n_actions=2))
