@@ -10,9 +10,11 @@ class Data(object):
 
     def __init__(self, n_states, n_actions, max_iterations=100, n_episodes=1000):
         table = np.random.rand(n_states, n_actions, n_states)
-        mask = np.random.rand(n_states, n_actions, n_states) < 0.5
+        mask = np.random.rand(n_states, n_actions, n_states) < 0.25
         table[mask] = 0
-        table = table / (np.sum(table, axis=2, keepdims=True) + 1e-20)
+        for i in range(n_states):
+            table[i, :, i] = table[i, :, i] + 1e-10
+        table = table / (np.sum(table, axis=2, keepdims=True) + 1e-10)
 
         self.transition_table = table
         self.gamma = 0.9

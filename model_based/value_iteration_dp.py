@@ -1,39 +1,43 @@
 from data.data import *
 
 
-def get_max_value(data):
-    value = np.zeros(data.n_states)
+def get_optimal_q_value(data):
+    q_value = np.zeros((data.n_states, data.n_actions))
     for r in range(data.max_iterations):
-        prev_value = np.array(value)
+        prev_value = q_value
 
-        # calculate value for states maxed over actions
-        value = np.max(data.gamma * np.dot(data.transition_table, value) + data.reward_table, axis=1)
+        # calculate value for states and actions
+        q_value = data.reward_table + data.gamma * np.dot(data.transition_table, get_value(q_value))
+
         # convergence check
-        if np.sum(value - prev_value) < 1e-3:
+        if np.sum(q_value - prev_value) < 1e-3:
             print('converged!')
             break
 
-    return value
+    return q_value
 
 
-def get_policy(data, value):
+def get_policy(q_value):
     # check which action gives best expected and assign it
-    policy = np.argmax(data.gamma * np.dot(data.transition_table, value) + data.reward_table, axis=1)
-
-    return policy
+    return np.argmax(q_value, axis=1)
 
 
-def main(data):
+def get_value(q_value):
+    # check which action gives best expected and return it
+    return np.max(q_value, axis=1)
+
+
+def get_optimal_policy(data):
     # get max value function
-    value = get_max_value(data)
-
-    print('Optimal Value:', value)
+    q_value = get_optimal_q_value(data)
 
     # improve the policy
-    policy = get_policy(data, value)
+    policy = get_policy(q_value)
 
-    print('Optimal Policy:', policy)
+    return policy, get_value(q_value)
 
 
 if __name__ == '__main__':
-    main(Data(n_states=5, n_actions=2))
+    policy, value = get_optimal_policy(Data(n_states=5, n_actions=2))
+    print('Optimal Value:', value)
+    print('Optimal Policy:', policy)
