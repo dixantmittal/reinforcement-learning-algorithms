@@ -6,9 +6,9 @@
 import numpy as np
 
 
-class Data(object):
+class Environment(object):
 
-    def __init__(self, n_states, n_actions, max_iterations=100, n_episodes=1000):
+    def __init__(self, n_states, n_actions, max_iterations=100, n_episodes=1000, episode_length=100):
         table = np.random.rand(n_states, n_actions, n_states)
         mask = np.random.rand(n_states, n_actions, n_states) < 0.25
         table[mask] = 0
@@ -23,6 +23,7 @@ class Data(object):
         self.n_states, self.n_actions = n_states, n_actions
         self.max_iterations = max_iterations
         self.n_episodes = n_episodes
+        self.episode_length = episode_length
 
     def transition_model(self, state, action=None):
         if action is None:
@@ -37,3 +38,7 @@ class Data(object):
 
         else:
             return self.reward_table[state, action]
+
+    def simulate(self, state, action):
+        next_state_distribution = self.transition_model(state, action)
+        return self.reward(state, action), np.random.choice(self.n_states, p=next_state_distribution)
