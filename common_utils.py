@@ -38,7 +38,7 @@ def random_action(environment):
 
 def random_policy(environment, stochastic=True):
     if not stochastic:
-        policy = np.random.randint(low=environment.n_actions, size=environment.n_actions)
+        policy = np.random.randint(low=environment.n_actions, size=environment.n_states)
     else:
         policy = np.random.rand(environment.n_states, environment.n_actions)
         policy = policy / (np.sum(policy, axis=1, keepdims=True) + 1e-10)
@@ -57,6 +57,8 @@ def optimal_policy(q_value, greedy=False):
 
 # param can be stochastic policy or Q_Value
 def greedy_policy(param):
+    if len(param.shape) == 1:
+        return param
     return np.argmax(param, axis=1)
 
 
